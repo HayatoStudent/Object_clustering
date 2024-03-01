@@ -25,13 +25,13 @@ LidarClusteringNode::LidarClusteringNode() : nh()
   nh.param("lidar_clustering/clip_min_height", clip_min_height, -0.85);
   nh.param("lidar_clustering/clip_max_height", clip_max_height, 0.5);
 
-  point_cloud_sub = nh.subscribe(lidar_topic, 1, &LidarClusteringNode::velodyne_callback, this);
+  point_cloud_sub = nh.subscribe("/points_raw", 1, &LidarClusteringNode::velodyne_callback, this);
 
   cluster_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("/lidar_points_cluster", 1);
   ground_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("/lidar_points_ground", 1);
   centroid_pub = nh.advertise<itolab_senior_car_msgs::Centroids>("/lidar_cluster_centroids", 1);
   detected_object_pub = nh.advertise<itolab_senior_car_msgs::DetectedObjectArray>("/lidar_detected_object", 1);
-
+  cluster_message_pub = nh.advertise<itolab_senior_car_msgs::CloudClusterArray>("/lidar_cluster_message", 1);
   bounding_boxes_pub = nh.advertise<jsk_recognition_msgs::BoundingBoxArray>("/lidar_bounding_boxes", 1);
   bounding_centroid_value_pub = nh.advertise<visualization_msgs::MarkerArray>("/lidar_centroid_val", 1);
   }
@@ -42,6 +42,7 @@ LidarClusteringNode::LidarClusteringNode() : nh()
 
     pcl::fromROSMsg(*in_msg, *current_sensor_cloud_ptr);
     velodyne_header = in_msg->header;
+    velodyne_header.frame_id = "base_link";
 
     PclPointXYZ::Ptr downsampled_cloud_ptr(new PclPointXYZ);
     if(downsample_cloud)
@@ -104,7 +105,9 @@ LidarClusteringNode::LidarClusteringNode() : nh()
     std::cout << "centroids published\n";
     cloud_cluster.header = velodyne_header;
     publishCloudClusters(&cluster_message_pub, cloud_cluster, output_frame, velodyne_header);
-    publishBoundingBoxes(cloud_cluster);
+
+
+    // publishBoundingBoxes(cloud_cluster);
     std::cout << "cloud cluster published\n";
   }
 
@@ -590,7 +593,8 @@ LidarClusteringNode::LidarClusteringNode() : nh()
 
         detected_object_array.objects.push_back(detected_object);
       }
-    detected_object_pub.publish(detected_object_array);
+    detected_object_pub.publish(detected_object_array); 
+
   }
 
   void LidarClusteringNode::publishBoundingBoxes(const itolab_senior_car_msgs::CloudClusterArray& clusters)

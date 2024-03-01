@@ -6,10 +6,10 @@
   <arg name="cluster_max_size" default="10000" />
   <arg name="clip_min_width" default="-0.3" />
   <arg name="clip_max_width" default="0.3" />
-  <arg name="clip_min_distance" default="0.2" />
-  <arg name="clip_max_distance" default="1.67" />
-  <arg name="clip_min_height" default="-0.85" />
-  <arg name="clip_max_height" default="0.5" />
+  <arg name="clip_min_distance" default="0.1" />
+  <arg name="clip_max_distance" default="1.2" />
+  <arg name="clip_min_height" default="-0.2" />
+  <arg name="clip_max_height" default="0.7" />
 
 
   <node pkg="lidar_clustering" type="lidar_clustering"

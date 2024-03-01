@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv)
 {
-  ros::init(argc,argv, "itolab_lidar_clustering");
+  ros::init(argc,argv, "lidar_clustering");
   lidar_clustering_node::LidarClusteringNode node;
   ros::spin();
 }

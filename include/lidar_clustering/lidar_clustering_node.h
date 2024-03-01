@@ -88,7 +88,7 @@ namespace lidar_clustering_node
   private :
     ros::NodeHandle nh;
     ros::Publisher cluster_cloud_pub, ground_cloud_pub;
-    ros::Publisher centroid_pub, cluster_message_pub, detected_object_pub;
+    ros::Publisher centroid_pub, detected_object_pub ,cluster_message_pub;
     ros::Publisher bounding_boxes_pub, bounding_centroid_value_pub;
     
     ros::Subscriber point_cloud_sub;
@@ -97,7 +97,7 @@ namespace lidar_clustering_node
     tf::StampedTransform* velodyne_output_transform;
     tf::TransformListener* transform_listener;
 
-    std::string output_frame = "velodyne";
+    std::string output_frame = "base_link";//velodyne
     std_msgs::Header velodyne_header;
 
     visualization_msgs::Marker visualization_marker;
@@ -128,7 +128,7 @@ namespace lidar_clustering_node
     double cluster_merge_threshold = 1.5;
     double cluster_distance = 0.75;
 
-    std::string lidar_topic = "/points_raw";
+    std::string lidar_topic = "/points_raw_baselink";
     std::vector<double> clustering_distances = {0.5, 1.1, 1.6, 2.1, 2.6};
     std::vector<double> clustering_ranges = {15, 30, 45, 60};
   };
